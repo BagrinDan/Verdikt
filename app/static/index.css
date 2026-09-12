@@ -1,0 +1,127 @@
+/* Современная минималистичная темная тема */
+:root {
+    --bg-color: #0d1117;        /* Основной фон */
+    --panel-bg: #161b22;        /* Фон карточек */
+    --text-main: #c9d1d9;       /* Основной текст */
+    --text-muted: #8b949e;      /* Второстепенный текст */
+    --border-color: #30363d;    /* Цвет границ */
+    --accent-green: #238636;    /* Спокойный зеленый для кнопок */
+    --accent-hover: #2ea043;    /* Зеленый при наведении */
+    --focus-ring: #3fb950;      /* Зеленый для фокуса полей */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    /* Простой и читаемый системный шрифт без засечек */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+header {
+    margin-top: 60px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.container {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 900px;
+    width: 90%;
+}
+
+/* Оформление карточек */
+.panel {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 24px;
+    flex: 1;
+    min-width: 320px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Легкая тень вместо свечения */
+}
+
+.panel h2 {
+    font-size: 1.1rem;
+    color: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+/* Формы и инпуты */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+label {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+input[type="text"], textarea {
+    background-color: #0d1117;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 12px;
+    border-radius: 6px;
+    /* Моноширинный шрифт оставляем только для ввода кода и ссылок */
+    font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus, textarea:focus {
+    border-color: var(--focus-ring);
+    box-shadow: 0 0 0 2px rgba(63, 185, 80, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 140px;
+}
+
+/* Кнопки */
+button {
+    background-color: var(--accent-green);
+    color: #ffffff;
+    border: 1px solid rgba(240, 246, 252, 0.1);
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 8px;
+}
+
+button:hover {
+    background-color: var(--accent-hover);
+}

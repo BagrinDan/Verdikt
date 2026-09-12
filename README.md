@@ -55,3 +55,10 @@ CodeQL identifies vulnerabilities via a taint graph and passes, for example, 100
     — Optional: web dashboard for viewing scan history
 
 ```
+
+
+Идеи:
+    2 LLM & 1 ML (LLM Cascade):
+        * ML фильтрует на low и high
+        * Слабая LLM проверят все low. Если есть подозрительные, помечает их как escalated Low и отправляет Сильной LLM
+        * Сильная LLM проверяет все high и escalated
