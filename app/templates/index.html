@@ -30,17 +30,29 @@
         <!-- Option 2: GIT REPO -->
         <div class="panel">
             <h2> Option 02: Git-Repository </h2>
-            <form action="/analyze/repo" method="POST" class="form-group">
+            <form id="analyzeForm" action="/analyze/repo" method="POST" class="form-group">
                 <label for="repo_url">Insert URL from Git-repo:</label>
                 <input type="text" id="repo_url" name="repo_url" placeholder="https://github.com/user/repo.git">
                 
                 <label for="branch_name">Branch (optional):</label>
                 <input type="text" id="branch_name" name="branch" placeholder="main">
+                
+                <label for="language">Source Language:</label>
+                <select id="language" name="language" required>
+                    <option value="python" selected>Python</option>
+                    <option value="javascript">JavaScript / TypeScript</option>
+                    <option value="java">Java</option>
+                    <option value="go">Go</option>
+                    <option value="cpp">C / C++</option>
+                    <option value="csharp">C#</option>
+                    <option value="ruby">Ruby</option>
+                </select>
 
                 <button type="submit">Clone and scan</button>
             </form>
         </div>
     </div>
-
+    
+    <script src="/script/scan_api.js"> </script>
 </body>
 </html>

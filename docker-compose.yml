@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - shared_data:/var/shared
+    ports:
+      - "11000:11000"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 11000
+
+  codeql:
+    build: ./codeql
+    env_file:
+      - .env
+    volumes:
+      - shared_data:/var/shared
+
+volumes:
+  shared_data:

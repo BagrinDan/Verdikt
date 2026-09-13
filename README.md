@@ -16,48 +16,28 @@ CodeQL identifies vulnerabilities via a taint graph and passes, for example, 100
 
 ```
 
-
-
- Code/Github Repo -> CodeQL -> ML -> LLM + RAG -> PDF Report
+ Code/Github Repo -> CodeQL -> ML -> Small LLM -> Strong LLM -> Strong LLM + RAG -> PDF Report
 
 
 
 [1] Source Code / Git Repository
           ↓
-[2] Taint Graph Construction (CodeQL / Custom AST Analyzer)
-    — Identifying sources (request.args, request.form, request.values)
-    — Identifying sinks (cursor.execute, db.session.execute, raw SQL)
-    — Tracing data propagation from source → sink
-            ↓
-[3] Candidate Path Extraction
-    — Each path is represented as a subgraph with intermediate nodes 
-      (assignments, string concatenations, function calls, conditional checks)  
-            ↓
-[4] ML Pre-filtering
-    — Filtering out obvious false positives to optimize token usage and reduce overhead for the LLM.    
-            ↓
-[4] LLM Exploitability Validation (without RAG)
-    — Input: path + few-shot examples (reference vulnerable/safe cases)
-    — Task: determine if the data is sanitized, even in non-standard ways
-    — Output: structured JSON — verdict, confidence, reasoning_steps
-            ↓
-[5] Confirmed Findings Filtering
-    — False positives are filtered out based on the validation results
-            ↓
-[6] LLM Report Generation (with RAG)
-    — Retrieval from knowledge base: CWE-89, OWASP SQLi Cheat Sheet, 
-      SQLAlchemy/Flask documentation on safe queries
-    — Input: confirmed finding + reasoning from Step 4 + retrieved context
-    — Output: coherent text — vulnerability description, risk assessment, fix recommendations
-            ↓
-[7] Final Report Generation
-    — Rendering to PDF (WeasyPrint / ReportLab)
-    — Optional: web dashboard for viewing scan history
-
-```
+[2] ML filtering:
+    ML will devide results in low and high based on parametrs
+          ↓
+[3] Weak LLM
+    Small LLM will go fast through all low cases to find posibile vuls.
+    It will mark them as escalated low vuls.
+          ↓
+[4] Strong LLM
+    Will go through all high and escalated low vuls 
+          ↓
+[5] RAG
+    Strong LLM will connected to RAG via API and will proced to generate .pdf results
 
 
-Идеи:
+
+Main plan:
     2 LLM & 1 ML (LLM Cascade):
         * ML фильтрует на low и high
         * Слабая LLM проверят все low. Если есть подозрительные, помечает их как escalated Low и отправляет Сильной LLM

@@ -218,3 +218,5 @@ __marimo__/
 .streamlit/secrets.toml
 
 examples.txt
+codeql/results/*
+codeql/workspace/*
