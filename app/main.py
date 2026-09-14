@@ -52,8 +52,6 @@ async def serve_home_page(request: Request):
 async def trigger_scan(payload: ScanRequest,
                        service: CodeQlScanInterface = Depends(get_scan_service)):    
     
-    logger.info(f"Starting scan: scan_id={payload.scan_id}, language={payload.language}, repo={payload.repo_url}")
-
     try:
         sarif_path = await service.run_full_scan(payload)
         
@@ -68,7 +66,10 @@ async def trigger_scan(payload: ScanRequest,
         }
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(
+            status_code=500,
+            detail={"status": "error", "message": str(e)}
+        )
 
 
 if __name__ == "__main__":

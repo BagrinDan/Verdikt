@@ -13,3 +13,4 @@ class ScanRequest(BaseModel):
         if not v.startswith("https://github.com/") and not v.startswith("https://gitlab.com/"):
             raise ValueError("Only https GitHub/GitLab URLs are allowed")
         return v
+    
