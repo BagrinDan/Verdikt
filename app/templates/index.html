@@ -16,25 +16,14 @@
 
     <div class="container"> 
 
-        <!-- Option 1: RAW CODE -->
-        <div class="panel">
-            <h2> Option 01: Raw code </h2>
-            <form action="/analyze/code" method="POST" class="form-group">
-                <label for="code_snippet">Insert code here:</label>
-                <textarea id="code_snippet" name="code" placeholder="// print('Hello, Cyberworld')"></textarea>
-
-                <button type="submit">Execute scan</button>
-            </form>
-        </div>
-
         <!-- Option 2: GIT REPO -->
         <div class="panel">
             <h2> Option 02: Git-Repository </h2>
-            <form id="analyzeForm" action="/analyze/repo" method="POST" class="form-group">
+            <form id="analyzeForm" action="/static_analyze/codeql" method="POST" class="form-group">
                 <label for="repo_url">Insert URL from Git-repo:</label>
                 <input type="text" id="repo_url" name="repo_url" placeholder="https://github.com/user/repo.git">
                 
-                <label for="branch_name">Branch (optional):</label>
+                <label for="branch_name">Branch (optional, main by default):</label>
                 <input type="text" id="branch_name" name="branch" placeholder="main">
                 
                 <label for="language">Source Language:</label>

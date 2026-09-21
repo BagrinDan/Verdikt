@@ -9,3 +9,5 @@ RUN tar -xvzf /tmp/codeql.tar.gz -C /opt/ && rm /tmp/codeql.tar.gz
 ENV PATH="/opt/codeql:${PATH}"
 
 RUN codeql --version
+
+CMD ["tail", "-f", "/dev/null"]

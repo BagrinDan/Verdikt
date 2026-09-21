@@ -11,6 +11,8 @@ services:
       - shared_data:/var/shared
     ports:
       - "11000:11000"
+    group_add:
+      - ${DOCKER_GID:-961}
     command: uvicorn app.main:app --host 0.0.0.0 --port 11000
 
   codeql:

@@ -10,12 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const payload = {
             repo_url: document.getElementById('repo_url').value,
-            branch: document.getElementById('branch_name').value || null,
+            branch: document.getElementById('branch_name').value || "main",
             language: document.getElementById('language').value
         };
 
         try {
-            const response = await fetch('/analyze/repo', {
+            const response = await fetch('/static_analyze/codeql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            console.log('Success:', data);
+            console.log('Сканирование завершено:', data);
         } catch (err) {
             console.error('Network Error:', err);
         }
