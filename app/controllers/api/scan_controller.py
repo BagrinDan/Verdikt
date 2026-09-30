@@ -4,7 +4,7 @@ from loguru import logger
 
 from app.service.interface.code_scan_interface import CodeQlScanInterface
 from app.service.codeql_scan_service import CodeQlScanService
-from app.models.scan_request import ScanRequest
+from app.models.requests.scan_request import ScanRequest
 
 
 router = APIRouter(prefix="/static_analyze", tags=["analyze_via_codeql"])

@@ -1,4 +1,4 @@
-console.log('SCRIPT VERSION 2 LOADED');
+console.log('SCAN SCRIPT LOADED');
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -8,29 +8,40 @@ document.addEventListener('DOMContentLoaded', () => {
     analyzeForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const payload = {
-            repo_url: document.getElementById('repo_url').value,
-            branch: document.getElementById('branch_name').value || "main",
-            language: document.getElementById('language').value
-        };
-
         try {
+            const payload = {
+                repo_url: document.getElementById('repo_url').value,
+                branch: document.getElementById('branch_name').value || "main",
+                language: document.getElementById('language').value
+            };
+
             const response = await fetch('/static_analyze/codeql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
 
-            const data = await response.json();
+            const data = await response.json().catch(() => null);
+
             if (!response.ok) {
-                console.error('Validation/Server Error:', data);
-                alert(`Error: ${JSON.stringify(data.detail)}`);
-                return;
+                const message =
+                    data?.message ??
+                    data?.detail?.message ??                                   // <- добавить
+                    (typeof data?.detail === 'string' ? data.detail : null) ??
+                    `Server error (${response.status})`;
+                showError(message);
             }
 
-            console.log('Сканирование завершено:', data);
+            console.log('Scanning complete:', data);
         } catch (err) {
             console.error('Network Error:', err);
+            showError('Network error or server is unreachable.');
         }
     });
 });
+
+function showError(message) {
+    const errorBlock = document.getElementById('error-alert'); 
+    errorBlock.innerText = message;
+    errorBlock.style.display = 'block';
+}

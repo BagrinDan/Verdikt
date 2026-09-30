@@ -1,12 +1,11 @@
-# External
+# Libs
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import FastAPI
-from loguru import logger
 
-# Internal
+# Dependency
 from app.controllers.pages.main_page import router as home_page
 from app.controllers.api.scan_controller import router as codeql_scan
 

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from app.models.scan_request import ScanRequest
+from app.models.requests.scan_request import ScanRequest
 
 
 class CodeQlScanInterface(ABC):
