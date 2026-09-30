@@ -7,12 +7,11 @@ class Settings(BaseSettings):
     codeql_workspace_dir: Path
     codeql_results_dir: Path
     
-    codeql_execution_mode: str = "local"
+    codeql_execution_mode: str 
     codeql_container_name: str = "verdikt-codeql"
     debug: bool = True
     docker_gid: int = 961
 
-    class Config:
-        env_file = ".env"
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
 settings = Settings()

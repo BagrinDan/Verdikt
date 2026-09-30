@@ -69,7 +69,7 @@ class CodeQlScanService(CodeQlScanInterface):
 
         # Проверяем executor (либо докер либо локалка)
         # Это нужно чтобы понять если была выбрана правильная среда запуска кода
-        logger.info(f"[INFO | CodeQlScanService] Executor {self.executor.__class__.__name__}")
+        logger.info(f"[INFO | CodeQlScanService] Executor is {self.executor.__class__.__name__}")
 
         # Формируем гит команду которая сделает клонированиет  
         clone_cmd = [

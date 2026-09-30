@@ -61,4 +61,4 @@ class DockerCodeQlExecutor(CodeQlExecutor):
         logger.debug(f"[DEBUG | DockerCodeQlExecutor]: CodeQL CLI ({label}) response: "
                      f"output {stdout.decode()}. errors {stderr.decode()}")
         if proc.returncode != 0:
-            raise RuntimeError(f"[EXCEPTION | DockerCodeQlExecutor] CodeQL {label} failed: {stderr.decode()}")
+            raise RuntimeError(f"[EXCEPTION | DockerCodeQlExecutor] CodeQL {label} failed: \n{stderr.decode()}")
