@@ -6,6 +6,8 @@
     <title>VERDIKT</title>
     
     <link rel="stylesheet" href="{{ url_for('static', path='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='staper.css') }}">
+
 </head>
 <body>
 
@@ -39,12 +41,39 @@
 
                 <button type="submit">Clone and scan</button>
             </form>
+
+            <div id="stepper-container" class="stepper-container">
+    
+            <div class="step" data-step="codeql">
+                <div class="step-circle"></div>
+                <div class="step-label">CodeQL</div>
+            </div>
+            
+            <div class="step" data-step="ml">
+                <div class="step-circle"></div>
+                <div class="step-label">ML</div>
+            </div>
+            
+            <div class="step" data-step="weak_llm">
+                <div class="step-circle"></div>
+                <div class="step-label">Secondary LLM</div>
+            </div>
+            
+            <div class="step" data-step="strong_llm">
+                <div class="step-circle"></div>
+                <div class="step-label">Main LLM</div>
+            </div>
+            
+            </div>
         </div>
     </div>
 
     <div id="error-alert" style="color: red; display: none; margin-top: 10px;">
     </div>
-    
+
+    <div id="success-alert" style="color: rgb(0, 255, 30); display: none; margin-top: 10px;">
+    </div>
+   
     <script src="/script/scan_api.js"> </script>
 </body>
 </html>

@@ -82,7 +82,7 @@ class CodeQlScanService(CodeQlScanInterface):
                     str(source_dir)
         ]
 
-        # Создает асинхронное скачивание ветки 
+        # Создаем асинхронное скачивание ветки 
         proc = await asyncio.create_subprocess_exec(
             *clone_cmd, 
             stdout=asyncio.subprocess.PIPE, # Сохраняем поток выводов Гита 

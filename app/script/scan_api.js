@@ -8,6 +8,17 @@ document.addEventListener('DOMContentLoaded', () => {
     analyzeForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        const errorAlert = document.getElementById('error-alert');
+        const successAlert = document.getElementById('success-alert');
+
+        errorAlert.style.display = 'none';
+        successAlert.style.display = 'none';
+
+        errorAlert.innerText = '';
+        successAlert.innerText = '';
+
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('completed'));
+
         try {
             const payload = {
                 repo_url: document.getElementById('repo_url').value,
@@ -15,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 language: document.getElementById('language').value
             };
 
-            const response = await fetch('/static_analyze/codeql', {
+            const response = await fetch('/static_analyze/scaning', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -26,22 +37,30 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) {
                 const message =
                     data?.message ??
-                    data?.detail?.message ??                                   // <- добавить
+                    data?.detail?.message ??                                   
                     (typeof data?.detail === 'string' ? data.detail : null) ??
                     `Server error (${response.status})`;
-                showError(message);
-            }
+                showMessage(message, "error-alert");
+            } else {
+                const message =
+                    data?.message ??
+                    data?.detail?.message ??                                   
+                    (typeof data?.detail === 'string' ? data.detail : null) ??
+                    `Scan status: (${response.status})`;
+                showMessage(message, "success-alert");
+            } 
 
             console.log('Scanning complete:', data);
         } catch (err) {
             console.error('Network Error:', err);
-            showError('Network error or server is unreachable.');
+            showMessage('Network error or server is unreachable.');
         }
     });
 });
 
-function showError(message) {
-    const errorBlock = document.getElementById('error-alert'); 
+function showMessage(message, type) {
+    const errorBlock = document.getElementById(type); 
     errorBlock.innerText = message;
     errorBlock.style.display = 'block';
 }
+
