@@ -1,7 +1,42 @@
 console.log('SCAN SCRIPT LOADED');
 
-document.addEventListener('DOMContentLoaded', () => {
 
+function showMessage(message, type) {
+    if (typeof message === 'object') {
+        message = JSON.stringify(message);
+    }
+    const block = document.getElementById(type); 
+    if (block) {
+        block.innerText = message;
+        block.style.display = 'block';
+    }
+}
+
+function markStepWorking(stepName) {
+    const stepEl = document.querySelector(`.step[data-step="${stepName}"]`);
+    if (stepEl) {
+        stepEl.classList.remove('error'); 
+        stepEl.classList.add('active');
+    }
+}
+
+function markStepError(stepName) {
+    const stepEl = document.querySelector(`.step[data-step="${stepName}"]`);
+    if (stepEl) {
+        stepEl.classList.remove('active');
+        stepEl.classList.add('error');
+    }
+}
+
+function markStepCompleted(stepName) {
+    const stepEl = document.querySelector(`.step[data-step="${stepName}"]`);
+    if (stepEl) {
+        stepEl.classList.remove('active'); 
+        stepEl.classList.add('completed');  
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
     const analyzeForm = document.getElementById('analyzeForm');
     if (!analyzeForm) return;
 
@@ -11,13 +46,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorAlert = document.getElementById('error-alert');
         const successAlert = document.getElementById('success-alert');
 
-        errorAlert.style.display = 'none';
-        successAlert.style.display = 'none';
-
-        errorAlert.innerText = '';
-        successAlert.innerText = '';
-
-        document.querySelectorAll('.step').forEach(el => el.classList.remove('completed'));
+        if (errorAlert) {
+            errorAlert.style.display = 'none';
+            errorAlert.innerText = '';
+        }
+        if (successAlert) {
+            successAlert.style.display = 'none';
+            successAlert.innerText = '';
+        }
+        
+        document.querySelectorAll('.step').forEach(el => {
+            el.classList.remove('completed', 'active');
+        });
 
         try {
             const payload = {
@@ -32,35 +72,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(payload)
             });
 
-            const data = await response.json().catch(() => null);
-
             if (!response.ok) {
-                const message =
-                    data?.message ??
-                    data?.detail?.message ??                                   
-                    (typeof data?.detail === 'string' ? data.detail : null) ??
-                    `Server error (${response.status})`;
-                showMessage(message, "error-alert");
-            } else {
-                const message =
-                    data?.message ??
-                    data?.detail?.message ??                                   
-                    (typeof data?.detail === 'string' ? data.detail : null) ??
-                    `Scan status: (${response.status})`;
-                showMessage(message, "success-alert");
-            } 
+                try {
+                    const errorData = await response.json();
+                    showMessage(errorData.detail || errorData.message || `Server error (${response.status})`, "error-alert");
+                } catch {
+                    showMessage(`Server error (${response.status})`, "error-alert");
+                }
+                return;
+            }
 
-            console.log('Scanning complete:', data);
+            // === ЧТЕНИЕ ПОТОКА (STREAMING) ===
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder('utf-8');
+            let buffer = ''; 
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                buffer += decoder.decode(value, { stream: true });
+                let lines = buffer.split('\n');
+                
+                buffer = lines.pop(); 
+
+                for (let line of lines) {
+                    if (line.trim() === '') continue; 
+                    
+                    try {
+                        const data = JSON.parse(line);
+                        console.log("Получено событие с сервера:", data);
+
+                        if (data.status === "error") {
+                            if (data.step) {
+                                markStepError(data.step); 
+                            }
+                            showMessage(data.message, "error-alert");
+                            return; 
+                        }
+
+                        if (data.step) {
+                            if (data.status === "active") {
+                                markStepWorking(data.step);
+                            } else if (data.status === "completed") {
+                                markStepCompleted(data.step);
+                            } 
+                        }
+
+                        if (data.status === "success") {
+                            showMessage(data.message || 'Scaning complete :)', "success-alert");
+                        }
+
+                    } catch (parseErr) {
+                        console.error("Ошибка парсинга JSON:", line, parseErr);
+                    }
+                }
+            }
         } catch (err) {
             console.error('Network Error:', err);
-            showMessage('Network error or server is unreachable.');
+            showMessage('Network error or server is unreachable.', "error-alert");
         }
     });
 });
-
-function showMessage(message, type) {
-    const errorBlock = document.getElementById(type); 
-    errorBlock.innerText = message;
-    errorBlock.style.display = 'block';
-}
-

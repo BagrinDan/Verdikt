@@ -10,19 +10,17 @@
     padding: 10px 0;
 }
 
-/* Тонкая цельная горизонтальная линия сквозь все кружки */
 .stepper-container::before {
     content: '';
     position: absolute;
-    top: 19px; /* По центру кружка */
+    top: 19px; 
     left: 10%;
     right: 10%;
     height: 1px;
-    background-color: #444; /* Серый цвет тонкой линии */
+    background-color: #444; 
     z-index: 1;
 }
 
-/* Шаг */
 .step {
     display: flex;
     flex-direction: column;
@@ -32,18 +30,16 @@
     flex: 1;
 }
 
-/* Кружок */
 .step-circle {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: #1a1b1e; /* Фон под цвет вашей панели */
+    background-color: #1a1b1e; 
     border: 2px solid #555;
     box-sizing: border-box;
     transition: all 0.3s ease;
 }
 
-/* Подпись под кружком */
 .step-label {
     margin-top: 10px;
     font-size: 13px;
@@ -52,20 +48,36 @@
     white-space: nowrap;
 }
 
-/* --- Состояния --- */
+/* --- States --- */
 
-/* Активный/текущий шаг (закрашенный круг) */
+
+/* Active */
 .step.active .step-circle {
-    background-color: #2e7d32; /* Зеленый (или любой ваш цвет) */
-    border-color: #2e7d32;
+    background-color: #bccd1e; 
+    border-color: #7d7c2e;
 }
 
-.step.active .step-label {
-    color: #fff;
+.step.completed .step-label {
+    color: #c8d32f;
 }
 
-/* Завершенный шаг */
+/* Completed */
+
 .step.completed .step-circle {
     background-color: #2e7d32;
     border-color: #2e7d32;
+}
+
+.step.completed .step-label {
+    color: #3fd32f;
+}
+
+/* Error */
+.step.error .step-circle {
+    background-color: #df1515;
+    border-color: #fe0000c6;
+}
+
+.step.error .step-label {
+    color: #d32f2f;
 }
