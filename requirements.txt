@@ -2,3 +2,6 @@ fastapi
 uvicorn
 jinja2
 python-multipart
+pydantic-settings
+python-dotenv
+loguru
