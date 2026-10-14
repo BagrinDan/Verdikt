@@ -14,9 +14,9 @@ from app.core.exceptions.git_branch_exception import GitBranchNotFoundError
 # Класс который отвечает за работу сканирования используя Codeql
 #
 # Что делает класс: 
-# 1. сделать клон репозитория (отвечает метод clone_repo()), 
-# 2. инициализировать базу данных codeql (отвечает метод create_codeql_db())
-# 3. выполнить сканирование (отвечает метод run_codeql_analyz())
+# 1. Делает клон репозитория (отвечает метод clone_repo()), 
+# 2. инициализирует базу данных codeql (отвечает метод create_codeql_db())
+# 3. выполняет сканирование (отвечает метод run_codeql_analyz())
 
 
 class CodeQlScanService(CodeQlScanInterface):
@@ -49,10 +49,11 @@ class CodeQlScanService(CodeQlScanInterface):
     # для дальнейшей сохранения результат в codeql/results
     # ----------------------------------------------------------------
     async def clone_repo(self, payload: ScanRequest) -> Path:
+        # Проверяем бранч 
         branch_check = await check_remote_branch_exists(payload.repo_url, payload.branch)
 
         logger.info(f"[INFO | CodeQlScanService] Branch check: {branch_check}")
-        if branch_check is not None:     # функция возвращает Null если бранч существует
+        if branch_check is False:     
             raise GitBranchNotFoundError(
                 repo_url=payload.repo_url,
                 branch=payload.branch,
