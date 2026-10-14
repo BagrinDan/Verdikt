@@ -1,0 +1,83 @@
+.stepper-container {
+    display: flex !important; /* !important не даст скриптам сделать его block */
+    flex-direction: row !important; /* Жестко задаем строку */
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    width: 100%;
+    margin-top: 30px;
+    padding: 10px 0;
+}
+
+.stepper-container::before {
+    content: '';
+    position: absolute;
+    top: 19px; 
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background-color: #444; 
+    z-index: 1;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+}
+
+.step-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #1a1b1e; 
+    border: 2px solid #555;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.step-label {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #888;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* --- States --- */
+
+
+/* Active */
+.step.active .step-circle {
+    background-color: #bccd1e; 
+    border-color: #7d7c2e;
+}
+
+.step.completed .step-label {
+    color: #c8d32f;
+}
+
+/* Completed */
+
+.step.completed .step-circle {
+    background-color: #2e7d32;
+    border-color: #2e7d32;
+}
+
+.step.completed .step-label {
+    color: #3fd32f;
+}
+
+/* Error */
+.step.error .step-circle {
+    background-color: #df1515;
+    border-color: #fe0000c6;
+}
+
+.step.error .step-label {
+    color: #d32f2f;
+}

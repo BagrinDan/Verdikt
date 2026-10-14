@@ -6,6 +6,8 @@
     <title>VERDIKT</title>
     
     <link rel="stylesheet" href="{{ url_for('static', path='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='staper.css') }}">
+
 </head>
 <body>
 
@@ -16,31 +18,61 @@
 
     <div class="container"> 
 
-        <!-- Option 1: RAW CODE -->
         <div class="panel">
-            <h2> Option 01: Raw code </h2>
-            <form action="/analyze/code" method="POST" class="form-group">
-                <label for="code_snippet">Insert code here:</label>
-                <textarea id="code_snippet" name="code" placeholder="// print('Hello, Cyberworld')"></textarea>
-
-                <button type="submit">Execute scan</button>
-            </form>
-        </div>
-
-        <!-- Option 2: GIT REPO -->
-        <div class="panel">
-            <h2> Option 02: Git-Repository </h2>
-            <form action="/analyze/repo" method="POST" class="form-group">
+            <h2> Git-Repository </h2>
+            <form id="analyzeForm" action="/static_analyze/codeql" method="POST" class="form-group">
                 <label for="repo_url">Insert URL from Git-repo:</label>
                 <input type="text" id="repo_url" name="repo_url" placeholder="https://github.com/user/repo.git">
                 
-                <label for="branch_name">Branch (optional):</label>
+                <label for="branch_name">Branch (optional, main by default):</label>
                 <input type="text" id="branch_name" name="branch" placeholder="main">
+                
+                <label for="language">Source Language:</label>
+                <select id="language" name="language" required>
+                    <option value="python" selected>Python</option>
+                    <option value="javascript">JavaScript / TypeScript</option>
+                    <option value="java">Java</option>
+                    <option value="go">Go</option>
+                    <option value="cpp">C / C++</option>
+                    <option value="csharp">C#</option>
+                    <option value="ruby">Ruby</option>
+                </select>
 
                 <button type="submit">Clone and scan</button>
             </form>
+
+            <div id="stepper-container" class="stepper-container">
+    
+            <div class="step" data-step="codeql">
+                <div class="step-circle"></div>
+                <div class="step-label">CodeQL</div>
+            </div>
+            
+            <div class="step" data-step="ml">
+                <div class="step-circle"></div>
+                <div class="step-label">ML</div>
+            </div>
+            
+            <div class="step" data-step="weak_llm">
+                <div class="step-circle"></div>
+                <div class="step-label">Secondary LLM</div>
+            </div>
+            
+            <div class="step" data-step="strong_llm">
+                <div class="step-circle"></div>
+                <div class="step-label">Main LLM</div>
+            </div>
+            
+            </div>
         </div>
     </div>
 
+    <div id="error-alert" style="color: red; display: none; margin-top: 10px;">
+    </div>
+
+    <div id="success-alert" style="color: rgb(0, 255, 30); display: none; margin-top: 10px;">
+    </div>
+   
+    <script src="/script/scan_api.js"> </script>
 </body>
 </html>
