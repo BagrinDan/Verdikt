@@ -223,3 +223,9 @@ codeql/workspace/*
 TODO.txt
 
 script.py
+
+ml/__pycache__
+
+benchmark/BenchmarkJava
+benchmark/BenchmarkPython
+benchmark/image.png
