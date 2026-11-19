@@ -52,7 +52,7 @@ class CodeQlScanService(CodeQlScanInterface):
         # Проверяем бранч 
         branch_check = await check_remote_branch_exists(payload.repo_url, payload.branch)
 
-        logger.info(f"[INFO | CodeQlScanService] Branch check: {branch_check}")
+        logger.info(f"[INFO | CodeQlScanService] Branch is: {branch_check}")
         if branch_check is False:     
             raise GitBranchNotFoundError(
                 repo_url=payload.repo_url,

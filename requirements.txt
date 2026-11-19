@@ -5,3 +5,8 @@ python-multipart
 pydantic-settings
 python-dotenv
 loguru
+numpy
+scikit-learn
+pandas
+xgboost
+matplotlib
