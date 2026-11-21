@@ -3,13 +3,10 @@ from typing import Dict, Any
 from loguru import logger
 import os
 
-# TODO: If branch in params is main - switched to master. And reverse
+# Проверяет если бранч существует. Возвращает true если да
+# и очевидно на false если нет
 
 async def check_remote_branch_exists(repo_url: str, branch: str) -> Dict[str, Any]:
-    """
-    Проверяет существование ветки в удаленном репозитории.
-    Возвращает словарь со статусом и информацией.
-    """
 
     env = os.environ.copy()
     env["GIT_TERMINAL_PROMPT"] = "0"      # Запрещает текстовый ввод пароля в терминал
@@ -17,7 +14,10 @@ async def check_remote_branch_exists(repo_url: str, branch: str) -> Dict[str, An
     env["GIT_CREDENTIAL_HELPER"] = ""     # Отключает системные креденшалы
 
     # Формируем гит команду
-    check_branch_cmd = ["git", "ls-remote", "--heads", repo_url, branch]
+    check_branch_cmd = ["git", "ls-remote", "--heads", 
+                        repo_url, 
+                        branch
+                    ]
 
     # Запускаем команду 
     proc_check = await asyncio.create_subprocess_exec(

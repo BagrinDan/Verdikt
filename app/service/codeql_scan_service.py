@@ -10,15 +10,17 @@ from app.executor.executor_handler import get_codeql_executor
 from app.helper.git_branch_check import check_remote_branch_exists
 from app.core.exceptions.git_branch_exception import GitBranchNotFoundError
 from app.models.responses.codeql_scan_result import CodeQlScanResult
+from app.helper.branch_switcher import switch
 
-
-#
+# =========================================================================
 # Класс который отвечает за работу сканирования используя Codeql
 #
 # Что делает класс: 
 # 1. Делает клон репозитория (отвечает метод clone_repo()), 
 # 2. Инициализирует базу данных codeql (отвечает метод create_codeql_db())
 # 3. Выполняет сканирование базы (отвечает метод run_codeql_analyz())
+# =========================================================================
+
 
 
 class CodeQlScanService(CodeQlScanInterface):
@@ -50,21 +52,27 @@ class CodeQlScanService(CodeQlScanInterface):
             source_dir=source_dir
         )
 
+
     # ----------------------------------------------------------------
     # Данный метод клонирует репозитории локально в codeql/workspace 
     # для дальнейшей сохранения результат в codeql/results
     # ----------------------------------------------------------------
     async def clone_repo(self, payload: ScanRequest) -> Path:
-        # Проверяем бранч 
+        # Проверяем бранч
         branch_check = await check_remote_branch_exists(payload.repo_url, payload.branch)
 
-        logger.info(f"[INFO | CodeQlScanService] Branch is: {branch_check}")
-        if branch_check is False:     
-            raise GitBranchNotFoundError(
-                repo_url=payload.repo_url,
-                branch=payload.branch,
-                message="In this repo there is not branch: " + payload.branch
-            )
+        # Если бранч не существует и он 'main' || 'master' то меняется на соответвующий бранч
+        # (Подробнее в app/helper/branch_switcher.py)
+        # В противном случае кидает ошибку
+        if branch_check is False:
+            if payload.branch == 'master' or payload.branch == 'main':
+                payload.branch = switch(payload.branch)
+            else:
+                raise GitBranchNotFoundError(
+                    repo_url=payload.repo_url,
+                    branch=payload.branch,
+                    message="In this repo there is not branch: " + payload.branch
+                )    
 
         # Инициализируем папки для CodeQL
         source_dir = self.workspace_dir / payload.scan_id
@@ -79,11 +87,7 @@ class CodeQlScanService(CodeQlScanInterface):
         logger.info(f"[INFO | CodeQlScanService] Executor is {self.executor.__class__.__name__}")
 
         # Формируем гит команду которая сделает клонированиет  
-        clone_cmd = [
-                    "git", 
-                    "clone", 
-                    "--depth", "1", # Скачиваем последний коммит, чтобы не загрузать лишнего 
-                    "--branch", 
+        clone_cmd = ["git", "clone", "--depth", "1", "--branch", 
                     payload.branch, 
                     payload.repo_url, 
                     str(source_dir)
