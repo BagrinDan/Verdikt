@@ -2,7 +2,6 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from fastapi import FastAPI
 
 # Dependency
@@ -21,9 +20,7 @@ app = FastAPI(
 # =======================
 # Mounting frontend stuff
 # =======================
-templates = Jinja2Templates(directory="app/templates") # HTML
-app.mount("/static", StaticFiles(directory="app/static"), name="static") # CSS
-app.mount("/script", StaticFiles(directory="app/script"), name="script") # Javastrip
+app.mount("/static", StaticFiles(directory="app/web/static"), name="static") # CSS и JS
 
 # ======================
 # Mounting backend stuff

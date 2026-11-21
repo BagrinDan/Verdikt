@@ -9,14 +9,16 @@ from app.models.requests.scan_request import ScanRequest
 from app.executor.executor_handler import get_codeql_executor
 from app.helper.git_branch_check import check_remote_branch_exists
 from app.core.exceptions.git_branch_exception import GitBranchNotFoundError
+from app.models.responses.codeql_scan_result import CodeQlScanResult
+
 
 #
 # Класс который отвечает за работу сканирования используя Codeql
 #
 # Что делает класс: 
 # 1. Делает клон репозитория (отвечает метод clone_repo()), 
-# 2. инициализирует базу данных codeql (отвечает метод create_codeql_db())
-# 3. выполняет сканирование (отвечает метод run_codeql_analyz())
+# 2. Инициализирует базу данных codeql (отвечает метод create_codeql_db())
+# 3. Выполняет сканирование базы (отвечает метод run_codeql_analyz())
 
 
 class CodeQlScanService(CodeQlScanInterface):
@@ -28,7 +30,7 @@ class CodeQlScanService(CodeQlScanInterface):
     # ---------------------------------------
     # Читает payload и выполняет сканирование 
     # ---------------------------------------
-    async def run_full_scan(self, payload: ScanRequest) -> Path:
+    async def run_full_scan(self, payload: ScanRequest) -> CodeQlScanResult:
         payload.scan_id = str(uuid.uuid4())
 
         logger.info(
@@ -39,10 +41,14 @@ class CodeQlScanService(CodeQlScanInterface):
         )
         
         source_dir = await self.clone_repo(payload)
-        db_dir, sarif_file = await self.create_codeql_db(payload, source_dir) 
-        sarif_file = await self.run_codeql_analyz(db_dir, payload, sarif_file)
+        db_dir, sarif_path = await self.create_codeql_db(payload, source_dir) 
+        sarif_path = await self.run_codeql_analyz(db_dir, payload, sarif_path)
 
-        return sarif_file
+        return CodeQlScanResult(
+            scan_id=payload.scan_id,
+            sarif_path=sarif_path,
+            source_dir=source_dir
+        )
 
     # ----------------------------------------------------------------
     # Данный метод клонирует репозитории локально в codeql/workspace 
@@ -57,7 +63,7 @@ class CodeQlScanService(CodeQlScanInterface):
             raise GitBranchNotFoundError(
                 repo_url=payload.repo_url,
                 branch=payload.branch,
-                message=branch_check.get("message")
+                message="In this repo there is not branch: " + payload.branch
             )
 
         # Инициализируем папки для CodeQL
