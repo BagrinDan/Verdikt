@@ -5,11 +5,14 @@ function showMessage(message, type) {
     if (typeof message === 'object') {
         message = JSON.stringify(message);
     }
-    const block = document.getElementById(type); 
-    if (block) {
-        block.innerText = message;
-        block.style.display = 'block';
-    }
+
+    const block = document.getElementById('status-alert');
+    if (!block) return;
+
+    block.innerText = message;
+    block.classList.remove('error', 'success');
+    block.classList.add(type.startsWith('error') ? 'error' : 'success');   
+    block.style.display = 'block';
 }
 
 function markStepWorking(stepName) {
@@ -42,7 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     analyzeForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-
+        
+        // Инитим поля HTML в скрипт чтобы использовать их по назначения
         const errorAlert = document.getElementById('error-alert');
         const successAlert = document.getElementById('success-alert');
 
@@ -55,23 +59,27 @@ document.addEventListener('DOMContentLoaded', () => {
             successAlert.innerText = '';
         }
         
+        // Показываем прогресс через степпер (гиги за шаги)
         document.querySelectorAll('.step').forEach(el => {
             el.classList.remove('completed', 'active');
         });
-
+        
         try {
+            // Собираем тело реквеста
             const payload = {
                 repo_url: document.getElementById('repo_url').value,
                 branch: document.getElementById('branch_name').value || "main",
                 language: document.getElementById('language').value
             };
-
+            
+            // Ловим ответку от бэкенда
             const response = await fetch('/static_analyze/scaning', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-
+            
+            // Если не ок то выводим ошибку 
             if (!response.ok) {
                 try {
                     const errorData = await response.json();
@@ -102,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     try {
                         const data = JSON.parse(line);
                         console.log("Получено событие с сервера:", data);
-
+                        
                         if (data.status === "error") {
                             if (data.step) {
                                 markStepError(data.step); 
@@ -119,8 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             } 
                         }
 
-                        if (data.status === "success") {
-                            showMessage(data.message || 'Scaning complete :)', "success-alert");
+                        if (data.message) {
+                            showMessage(data.message, "success-alert");     // показываем сообщение любого события
                         }
 
                     } catch (parseErr) {

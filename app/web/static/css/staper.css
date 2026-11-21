@@ -81,3 +81,18 @@
 .step.error .step-label {
     color: #d32f2f;
 }
+
+/* --- Status message (one block: the last message, colored by type) --- */
+.status-message {
+    display: none;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.status-message.error {
+    color: red;
+}
+
+.status-message.success {
+    color: rgb(0, 255, 30);
+}

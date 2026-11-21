@@ -223,3 +223,19 @@ codeql/workspace/*
 TODO.txt
 
 script.py
+
+ml/__pycache__
+
+docs
+# Данные ML: SARIF, БД CodeQL, taint-пути, датасеты (чужой код бенчмарков не коммитить)
+data/
+
+benchmark/*
+benchmark/SecuribenchMicro
+benchmark/WAVSEP
+
+
+ml/
+ml_/
+benchmark/
+a.txt/

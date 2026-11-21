@@ -6,9 +6,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     codeql_workspace_dir: Path
     codeql_results_dir: Path
+    taint_path: Path
+
     
     codeql_execution_mode: str 
-    codeql_container_name: str = "verdikt-codeql"
+    codeql_container_name: str #= "verdikt-codeql"
     debug: bool = True
     docker_gid: int = 961
 

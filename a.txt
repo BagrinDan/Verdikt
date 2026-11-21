@@ -1,0 +1,15 @@
+репозиторий бенчмарка
+   │  ml/scripts/scan_benchmark.py        (CodeQL)
+   ▼
+SARIF ─► SarifParser ─► TaintPath ─► JSONL
+                                        │
+                  ┌─────────────────────┤
+                  │ ml/ground_truth     │ ml/features.py
+                  ▼ (метка)             ▼ (признаки)
+                  └──────► ml/dataset_builder ◄──┘
+                                   ▼
+                      CSV: признаки + label + group + split
+                                   ▼
+                          ml/train_xgb.py
+                                   ▼
+                модель + порог + список признаков + метрики + графики
