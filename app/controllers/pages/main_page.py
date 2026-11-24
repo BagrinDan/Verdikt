@@ -12,3 +12,11 @@ async def home_page(request: Request):
         name="index.html",
         context={"title": "Main page"}
     )
+
+@router.get("/results", response_class=HTMLResponse)
+async def results_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="results.html",
+        context={"title": "Results"}
+    )

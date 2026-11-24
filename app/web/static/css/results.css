@@ -1,0 +1,67 @@
+[hidden] { display: none !important; }
+
+:root {
+    --bad: #f85149;      /* настоящая уязвимость */
+    --warn: #d29922;     /* не определено */
+}
+
+.results { width: 90%; max-width: 1000px; margin-bottom: 60px; }
+
+/* итог */
+.summary { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.pill { padding: 6px 14px; border: 1px solid var(--border-color); border-radius: 99px; background: var(--panel-bg); }
+.pill b { font-size: 1.1rem; margin-right: 4px; }
+.pill.real b { color: var(--bad); }
+.pill.unknown b { color: var(--warn); }
+.pill.fp b { color: var(--focus-ring); }
+
+.empty { color: var(--text-muted); border: 1px dashed var(--border-color); border-radius: 8px; padding: 28px; text-align: center; }
+.banner { color: var(--warn); font-size: .85rem; margin-bottom: 12px; }
+
+/* список и панель деталей */
+.layout { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.layout.open { grid-template-columns: 1.1fr 1fr; }
+
+.toolbar { display: flex; gap: 10px; margin-bottom: 12px; }
+.toolbar input, .toolbar select {
+    background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border-color);
+    border-radius: 6px; padding: 8px 10px;
+}
+.toolbar input { flex: 1; }
+
+.row {
+    display: grid; grid-template-columns: 24px 1fr auto auto; gap: 12px; align-items: center;
+    padding: 11px 14px; margin-bottom: 8px; cursor: pointer;
+    background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px;
+}
+.row:hover, .row.sel { border-color: var(--focus-ring); }
+.row .title { font-weight: 600; color: #fff; }
+.row .where { color: var(--text-muted); font-size: .8rem; word-break: break-all; }
+.row .icon { text-align: center; font-weight: 700; }
+.row.real .icon { color: var(--bad); }
+.row.unknown .icon { color: var(--warn); }
+.row.false_positive .icon { color: var(--focus-ring); }
+.conf { font-size: .75rem; padding: 2px 8px; border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-muted); }
+.conf:empty { visibility: hidden; }
+.status { color: var(--text-muted); font-size: .8rem; }
+.reason { grid-column: 2 / -1; color: var(--text-muted); font-size: .8rem; }
+
+.fp-box { margin-top: 18px; }
+.fp-box > summary { cursor: pointer; color: var(--text-muted); padding: 8px 0; }
+
+/* панель деталей */
+.drawer {
+    background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px;
+    padding: 16px; position: sticky; top: 12px; align-self: start;
+    max-height: calc(100vh - 24px); overflow: auto;
+}
+.drawer h3 { margin: 0 0 4px; color: #fff; }
+.drawer .close { float: right; background: transparent; border: 0; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; width: auto; padding: 0 6px; }
+.meta { color: var(--text-muted); font-size: .8rem; display: flex; gap: 14px; flex-wrap: wrap; }
+.note { color: var(--text-muted); font-size: .8rem; border-left: 3px solid var(--warn); padding-left: 10px; margin: 10px 0; }
+.block { border: 1px solid var(--border-color); border-radius: 6px; margin: 12px 0; }
+.block > summary { padding: 9px 12px; cursor: pointer; font-weight: 600; }
+.block .body { padding: 0 12px 12px; }
+pre { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; overflow: auto; font-size: .8rem; white-space: pre-wrap; word-break: break-word; }
+
+@media (max-width: 800px) { .layout.open { grid-template-columns: 1fr; } }

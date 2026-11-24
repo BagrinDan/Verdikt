@@ -4,18 +4,18 @@ from loguru import logger
 
 from app.models.domain.progress_event import ProgressEvent
 from app.models.requests.scan_request import ScanRequest
-from app.pipeline.sarif_parser import SarifParser
-from app.service.interface.code_scan_interface import CodeQlScanInterface
 from app.models.domain.enums import Step
 from app.models.responses.codeql_scan_result import CodeQlScanResult
 from app.models.domain.taint_path import TaintPath
+from app.pipeline.sarif_parser import SarifParser
+from app.service.interface.code_scan_interface import CodeQlScanInterface
 
 
 # Параметры алертов. Чем выше значения тем больше подробностей
 INITIAL_CONTEXT_LINES = 5      
 MAX_FLOWS_PER_RESULT = 5
 
-# Оркестратор который собирает все этапы в месте в целью выполнить работу
+# Оркестратор который собирает все этапы в месте с целью выполнить работу
 # и вернуть поэтапную информацию 
 
 class ScanOrchestrator:
@@ -36,13 +36,9 @@ class ScanOrchestrator:
             yield ProgressEvent.completed(step, f"Total of paths: {len(paths)}")
 
             # 3. Детектор (Salieri)
-            # step = Step.SALIERI
-            # yield ProgressEvent.active(step, f"Analyzing {len(paths)} paths")
-            # verdicts = await self._detect(paths)
-
+            
             # 4. Отчет (Amadeus)
             
-
         except Exception as e:
             logger.exception("[ERROR | orchestrator] scan failed at step={}", step)
             yield ProgressEvent.error(step, str(e))

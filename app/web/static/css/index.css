@@ -157,3 +157,35 @@ select#language option {
     color: var(--text-main, #c9d1d9);
     padding: 8px;
 }
+
+
+.tabs { display: flex; gap: 4px; margin-top: 20px; }
+.tabs a { padding: 6px 16px; border-radius: 6px; color: var(--text-muted); text-decoration: none; }
+.tabs a:hover { color: var(--text-main); }
+.tabs a.active { color: #fff; background: var(--panel-bg); border: 1px solid var(--border-color); }
+
+
+/* Форма в одну строку: URL, ветка, язык, кнопка */
+.container.wide { max-width: 1100px; }
+
+.form-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+}
+
+.form-row .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+
+.form-row input[type="text"],
+.form-row select#language { width: 100%; box-sizing: border-box; }
+
+.form-row button { margin-top: 0; white-space: nowrap; }
+
+/* Подпись под названием шага (staper.css не меняем) */
+.step-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+@media (max-width: 800px) {
+    .form-row { grid-template-columns: 1fr; }
+    .form-row button { width: 100%; }
+}

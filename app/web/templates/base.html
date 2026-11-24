@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERDIKT: {% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', path='css/index.css') }}">
+    {% block head %}{% endblock %}   
+</head>
+<body>
+    <nav class="tabs">
+        <a href="/"        class="{{ 'active' if active == 'scan' }}">Scan</a>
+        <a href="/results" class="{{ 'active' if active == 'results' }}">Results</a>
+    </nav>
+
+    <header>
+        <h1>VERDIKT <span class="cursor"></span></h1>
+        <div class="subtitle">Time for a verdict... </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    {% block scripts %}{% endblock %}   
+</body>
+</html>

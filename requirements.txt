@@ -10,3 +10,4 @@ scikit-learn
 pandas
 xgboost
 matplotlib
+ollama
